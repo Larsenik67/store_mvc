@@ -1,26 +1,29 @@
 <?php
     //on récupère quoi qu'il arrive TOUS les produits pour les lister en bas de page
     $products = $response["data"]["products"];
-?>
+    $prod = $response["data"]["prod"];
+    $action = $response["data"]["action"];
+
+    ?>
 
     <h1>Ajouter un produit</h1>
-    <form action="?ctrl=admin&action=addProduct" method="post">
+    <form action="<?= $action ?>" method="post">
         <p>
             <label>
                 Nom du produit :
-                <input type="text" name="name" value="">
+                <input type="text" name="name" value="<?= $prod['name'] ?>">
             </label>
         </p>
         <p>
             <label>
                 Prix du produit :
-                <input type="number" step="any" name="price" value="">
+                <input type="number" step="any" name="price" value="<?= $prod['price'] ?>">
             </label>
         </p>
         <p>
             <label>
                 Description du produit :
-                <textarea name="descr" rows=3></textarea>
+                <textarea name="descr" rows=3><?= $prod['description'] ?></textarea>
             </label>
         </p>
         <p>
@@ -47,8 +50,8 @@
                 <td><?= $prod["price"] ?></td>
                 <td><?= $prod["description"] ?></td>
                 <td>
-                    <a href="admin.php?id=<?= $prod["id"] ?>">MODIFIER</a> - 
-                    <a href="db-traitement.php?action=deleteProd&id=<?= $prod['id'] ?>"
+                    <a href="?ctrl=admin&action=index&id=<?= $prod["id"] ?>">MODIFIER</a> - 
+                    <a href="?ctrl=admin&action=deleteProduct&id=<?= $prod['id'] ?>"
                         onclick="confirmDelete('<?= $prod['name'] ?>')">
                         SUPPRIMER
                     </a>

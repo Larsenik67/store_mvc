@@ -27,18 +27,4 @@ class StoreController extends AbstractController
             "product" => $product
         ]);
     }
-
-    //?ctrl=store&action=updateProduct
-    public function  updateProduct($id, $name, $price, $descr, $image = null)
-    {
-        $manager = new ProductManager();
-        $product = $manager->findOneById($id);
-
-        if(!$product) return false;
-
-        return $this->render("store/product.php", [
-            "product" => $product
-        ]);
-    }
-    
 }
