@@ -14,7 +14,7 @@
                 <img src="https://via.placeholder.com/80.png?text=LOGO" alt="logo">
             </span>
             <a href="?ctrl=store">Accueil</a>
-            <a href="">Panier (<?= getFullQtt() ?>)</a>
+            <a href="?ctrl=cart">Panier (<?= getFullQtt() ?>)</a>
             <?php
                 if($user = Session::get("user")){
                     if($user["role"] == "ROLE_ADMIN"){

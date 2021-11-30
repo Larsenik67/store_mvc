@@ -11,19 +11,19 @@
         <p>
             <label>
                 Nom du produit :
-                <input type="text" name="name" value="<?= $prod['name'] ?>">
+                <input type="text" name="name" value="<?php $prod ? $prod['name'] : "" ?>">
             </label>
         </p>
         <p>
             <label>
                 Prix du produit :
-                <input type="number" step="any" name="price" value="<?= $prod['price'] ?>">
+                <input type="number" step="any" name="price" value="<?= $prod ? $prod['price'] : "" ?>">
             </label>
         </p>
         <p>
             <label>
                 Description du produit :
-                <textarea name="descr" rows=3><?= $prod['description'] ?></textarea>
+                <textarea name="descr" rows=3><?php $prod ? $prod['description'] : "" ?></textarea>
             </label>
         </p>
         <p>
@@ -70,4 +70,4 @@
             </p>
         </div>
     </table>
-    <script src="<?= JS_PATH ?>script.js"></script>
+    <script src="<?= JS_PATH ?>script.js"></script

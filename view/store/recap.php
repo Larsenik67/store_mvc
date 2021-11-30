@@ -18,7 +18,7 @@ if(Session::get($key)){
             <?php
             $totalGeneral = 0;
             
-            foreach($_SESSION['products'] as $index => $product){
+            foreach(Session::get($key) as $index => $product){
                 //on calcule le total de la ligne ici
                 $totalLigne = $product['price']*$product['qtt'];
                 ?>
