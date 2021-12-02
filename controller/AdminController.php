@@ -4,25 +4,17 @@ require "model/ProductManager.php";
 
 class AdminController extends AbstractController
 {
-    //?ctrl=admin
-    public function index($id)
+    //?ctrl=admin&action=index
+    public function index()
     {
         if(!$this->isGranted("ROLE_ADMIN")) return false;
 
         $manager = new ProductManager();
         $products = $manager->findAll();
-        $action = "?ctrl=admin&action=addProduct";
-        
-        if($prod = $manager->findOneById($id)){
-            $action = "?ctrl=admin&action=updateProduct&id=$id";
-        }
 
         return $this->render("admin/home.php", [
-            "products" => $products,
-            "prod" => $prod,
-            "action" => $action
+            "products" => $products
         ]);
-        
     }
 
     //?ctrl=admin&action=addProduct
@@ -51,39 +43,47 @@ class AdminController extends AbstractController
         else return false;
     }
 
-    //?ctrl=admin&action=updateProduct
-    public function  updateProduct($id)
+    public function updateProduct($id)
     {
         if(!$this->isGranted("ROLE_ADMIN")) return false;
 
+        $manager = new ProductManager();
+
         if(Form::isSubmitted()){
-            $manager = new ProductManager();
             $name = Form::getData("name", "text");
             $price = Form::getData("price", "float", FILTER_FLAG_ALLOW_FRACTION);
             $descr = Form::getData("descr", "text");
 
-            if($id && $name && $price && $descr){
-                if($manager->updateProduct($id, $name, $price, $descr)){
-                    return $this->redirect("?ctrl=store&action=product&id=$id.php");
-                }
-            }
-            else return false;
-        }
-
-    }
-    //?ctrl=admin&action=deleteProduct
-    public function  deleteProduct($id)
-    {
-        if(!$this->isGranted("ROLE_ADMIN")) return false;
+            if($name && $price && $descr){
             
-            $manager = new ProductManager();
-
-            if($id && $manager->deleteProduct($id)){
-
-                $this->addFlash("success", "Produit supprimé en base de données !");
-                return $this->redirect("?ctrl=admin");
-                
+                if($manager->updateProduct($id, $name, $price, $descr)){
+                    $this->addFlash("success", "Le produit ".$name." a été modifié avec succès !!");
+                    return $this->redirect("?ctrl=admin");
+                }
+                else $this->addFlash("error", "Erreur de BDD !!");
             }
             else $this->addFlash("error", "Veuillez vérifier les données du formulaire");
+        }
+
+        $products = $manager->findAll();
+        $product = $manager->findOneById($id);
+
+        return $this->render("admin/home.php", [
+            "products"     => $products,
+            "prodToUpdate" => $product
+        ]);
+    }
+
+    public function deleteProduct($id){
+
+        $manager = new ProductManager();
+        $product = $manager->findOneById($id);
+
+        if($manager->deleteProduct($id)){
+            $this->addFlash("success", "Le produit ".$product["name"]." a été supprimé avec succès !!");
+        }
+        else $this->addFlash("error", "Erreur de BDD !!");
+
+        return $this->redirect("?ctrl=admin");
     }
 }

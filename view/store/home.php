@@ -15,7 +15,7 @@
                 <p><?= mb_strimwidth($prod["description"], 0, 50, "...") ?></p>
                 <p><?= number_format($prod["price"], 2, ',', ' ') ?>&nbsp;&euro;</p>
                 <p>
-                    <a href="">Ajouter au panier</a>
+                    <a href="?ctrl=cart&action=addToCart&id=<?= $prod["id"] ?>">Ajouter au panier</a>
                 </p>
             </div>
         <?php

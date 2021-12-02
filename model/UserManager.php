@@ -7,7 +7,7 @@ class UserManager extends AbstractManager
     {
         parent::connect();
     }
-    
+
     public function findAll()
     {
         $stmt = $this->executeQuery(

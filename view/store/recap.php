@@ -1,10 +1,14 @@
 <?php
+$cart = Session::get("cart");
 
-$key = "products";
-
-if(Session::get($key)){
+if(!$cart){
     ?>
-     <table>
+    <p>Votre panier est vide...</p>
+    <?php
+}
+else{
+    ?>
+    <table>
         <thead>
             <tr>
                 <th>#</th>
@@ -18,18 +22,18 @@ if(Session::get($key)){
             <?php
             $totalGeneral = 0;
             
-            foreach(Session::get($key) as $index => $product){
+            foreach($cart as $index => $product){
                 //on calcule le total de la ligne ici
                 $totalLigne = $product['price']*$product['qtt'];
                 ?>
                 <tr>
-                    <td><a href='traitement.php?action=deleteProd&id=<?=$index?>'>Supprimer</a></td>
+                    <td><a href='?ctrl=cart&action=deleteProd&index=<?= $index ?>'>Supprimer</a></td>
                     <td><?= $product['name'] ?></td>
                     <td><?= number_format($product['price'], 2, ",", "&nbsp;") ?>&nbsp;€</td>
                     <td>
-                        <a href='traitement.php?action=updateQtt&id=<?= $index ?>&mode=decr'>&minus;</a>
+                        <a href='?ctrl=cart&action=decreaseQtt&index=<?= $index ?>'>&minus;</a>
                         <?= $product['qtt'] ?>
-                        <a href='traitement.php?action=updateQtt&id=<?= $index ?>&mode=incr'>&plus;</a>
+                        <a href='?ctrl=cart&action=increaseQtt&index=<?= $index ?>'>&plus;</a>
                     </td>
                     <td><?= number_format($totalLigne, 2, ",", "&nbsp;")?>&nbsp;€</td>
                 </tr>
@@ -39,22 +43,14 @@ if(Session::get($key)){
             ?>
             <tr>
                 <td colspan=3></td>
-                <td><?= getFullQtt() ?></td>
+                <td><?= Session::getFullQtt() ?></td>
                 <td><strong><?= number_format($totalGeneral, 2, ",", "&nbsp;") ?>&nbsp;€</strong></td>
             </tr>
         </tbody>
     </table>
     <p>
-        <a href='traitement.php?action=deleteAll'>Vider le panier</a>
+        <a href="?ctrl=cart&action=deleteAll">Vider le panier</a>
     </p>
-    <?php
-}
-else{
-    
-    ?>
-   
-        <p>Aucun produit en session...</p>
-
     <?php
     }
 ?>

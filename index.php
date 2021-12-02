@@ -1,6 +1,6 @@
 <?php //FRONT CONTROLLER
 session_start();
-require "functions.php";
+
 require "config.php";//CONSTANTES DE l'APPLICATION
 require "service/Router.php";
 

@@ -1,33 +1,39 @@
 <?php
     //on récupère quoi qu'il arrive TOUS les produits pour les lister en bas de page
     $products = $response["data"]["products"];
-    $prod = $response["data"]["prod"];
-    $action = $response["data"]["action"];
+    
+    $formAction = "?ctrl=admin&action=addProduct";
+    $prodToUpdate = null;
 
-    ?>
+    if(isset($response["data"]["prodToUpdate"])){
+        $prodToUpdate = $response["data"]["prodToUpdate"];
+        $formAction = "?ctrl=admin&action=updateProduct&id=".$prodToUpdate["id"];
+    }
+?>
 
-    <h1>Ajouter un produit</h1>
-    <form action="<?= $action ?>" method="post">
+    <h1><?= $prodToUpdate ? "Modifier" : "Ajouter" ?> un produit</h1>
+    <form action="<?= $formAction ?>" method="post">
         <p>
             <label>
                 Nom du produit :
-                <input type="text" name="name" value="<?php $prod ? $prod['name'] : "" ?>">
+                <input type="text" name="name" value="<?= $prodToUpdate ? $prodToUpdate["name"] : "" ?>">
             </label>
         </p>
         <p>
             <label>
                 Prix du produit :
-                <input type="number" step="any" name="price" value="<?= $prod ? $prod['price'] : "" ?>">
+                <input type="number" step="any" name="price" value="<?= $prodToUpdate ? $prodToUpdate["price"] : "" ?>">
             </label>
         </p>
         <p>
             <label>
                 Description du produit :
-                <textarea name="descr" rows=3><?php $prod ? $prod['description'] : "" ?></textarea>
+                <textarea name="descr" rows=3><?= $prodToUpdate ? $prodToUpdate["description"] : "" ?></textarea>
             </label>
         </p>
         <p>
             <input type="submit" value="Valider">
+            <a href="?ctrl=admin">Annuler</a>
         </p>
     </form>
     <table>
@@ -46,11 +52,15 @@
             ?>
             <tr>
                 <td><?= $prod["id"] ?></td>
-                <td><?= $prod["name"] ?></td>
+                <td>
+                    <a href="?ctrl=store&action=product&id=<?= $prod["id"] ?>">
+                        <?= $prod["name"] ?>
+                    </a>
+                </td>
                 <td><?= $prod["price"] ?></td>
                 <td><?= $prod["description"] ?></td>
                 <td>
-                    <a href="?ctrl=admin&action=index&id=<?= $prod["id"] ?>">MODIFIER</a> - 
+                    <a href="?ctrl=admin&action=updateProduct&id=<?= $prod["id"] ?>">MODIFIER</a> - 
                     <a href="?ctrl=admin&action=deleteProduct&id=<?= $prod['id'] ?>"
                         onclick="confirmDelete('<?= $prod['name'] ?>')">
                         SUPPRIMER
@@ -70,4 +80,4 @@
             </p>
         </div>
     </table>
-    <script src="<?= JS_PATH ?>script.js"></script
+    <script src="<?= JS_PATH ?>script.js"></script>
